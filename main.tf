@@ -32,14 +32,6 @@ resource "helm_release" "traefik-ingress" {
       externalTrafficPolicy: Local
   containers: 
     args: 
-      --global.checknewversion 
-      --global.sendanonymoususage 
-      --entryPoints.traefik.address=:9000/tcp 
-      --entryPoints.web.address=:8000/tcp 
-      --entrypoints.web.http.redirections.entryPoint.to=:443 
-      --entryPoints.websecure.address=:8443/tcp 
-      --entryPoints.mqtt.address=:11887/tcp 
-      --entryPoints.mysql.address=:3106/tcp
       --entrypoints.websecure.http.tls=true
       --entrypoints.websecure.http.tls.domains[0].main=srt-wallet.io
       --entrypoints.websecure.http.tls.domains[0].sans=*.srt-wallet.io
