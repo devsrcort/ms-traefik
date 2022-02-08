@@ -15,15 +15,55 @@ provider "aws" {
   region = var.aws_region
 }
 
+provider "aws" {
+  alias = "dns_zones"
+}
+
 resource "helm_release" "traefik-ingress" {
   name       = "ms-traefik-ingress"
   chart      = "traefik"
   repository = "https://helm.traefik.io/traefik"
+  namespace = "kube-system"
   values = [<<EOF
   service:
     annotations:
       service.beta.kubernetes.io/aws-load-balancer-type: nlb
+      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:ap-northeast-2:282608367958:certificate/2ef62f13-bee0-4efc-a2b7-cf5fc1fd3f71
+      service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tls
+      service.beta.kubernetes.io/aws-load-balancer-ssl-ports: 443
+      service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: true
+      service.beta.kubernetes.io/aws-load-balancer-internal: true
       externalTrafficPolicy: Local
+  containers: 
+    args: 
+      --global.checknewversion 
+      --global.sendanonymoususage 
+      --entryPoints.traefik.address=:9000/tcp 
+      --entryPoints.web.address=:8000/tcp 
+      --entrypoints.web.http.redirections.entryPoint.to=:443 
+      --entryPoints.websecure.address=:8443/tcp 
+      --entryPoints.mqtt.address=:11887/tcp 
+      --entryPoints.mysql.address=:3106/tcp
+      --entrypoints.websecure.http.tls=true
+      --entrypoints.websecure.http.tls.domains[0].main=srt-wallet.io
+      --entrypoints.websecure.http.tls.domains[0].sans=*.srt-wallet.io
   EOF
   ]
+}
+
+resource "aws_route53_zone" "srtwallet" {
+  name = "srt-wallet.io"
+  comment = "srt-wallet.io"
+}
+
+resource "aws_route53_record" "srtwallet_sub1" {
+    zone_id = aws_route53_zone.srtwallet.zone_id
+    name    = "dev.srt-wallet.io"
+    type    = "A"
+    ttl     = "300"
+    records = ["111.111.111.111"]
+}
+
+output "nameservers" {
+    value = aws_route53_zone.srtwallet.name_servers
 }
