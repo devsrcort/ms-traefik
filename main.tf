@@ -46,20 +46,3 @@ resource "helm_release" "traefik-ingress" {
   EOF
   ]
 }
-
-resource "aws_route53_zone" "srtwallet" {
-  name = "srt-wallet.io"
-  comment = "srt-wallet.io"
-}
-
-resource "aws_route53_record" "srtwallet_sub1" {
-    zone_id = aws_route53_zone.srtwallet.zone_id
-    name    = "dev.srt-wallet.io"
-    type    = "A"
-    ttl     = "300"
-    records = ["111.111.111.111"]
-}
-
-output "nameservers" {
-    value = aws_route53_zone.srtwallet.name_servers
-}
