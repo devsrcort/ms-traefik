@@ -15,10 +15,6 @@ provider "aws" {
   region = var.aws_region
 }
 
-provider "aws" {
-  alias = "dns_zones"
-}
-
 resource "helm_release" "traefik-ingress" {
   name       = "ms-traefik-ingress"
   chart      = "traefik"
