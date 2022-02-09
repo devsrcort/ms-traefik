@@ -24,7 +24,7 @@ resource "helm_release" "traefik-ingress" {
   service:
     annotations:
       service.beta.kubernetes.io/aws-load-balancer-type: nlb
-      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:ap-northeast-2:282608367958:certificate/2ef62f13-bee0-4efc-a2b7-cf5fc1fd3f71
+      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:ap-northeast-2:282608367958:certificate/8ca62161-c34a-46b7-9af8-29fab77ad397
       service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tls
       service.beta.kubernetes.io/aws-load-balancer-ssl-ports: 443
       service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: true
