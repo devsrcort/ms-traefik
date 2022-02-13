@@ -29,6 +29,7 @@ resource "helm_release" "traefik-ingress" {
       service.beta.kubernetes.io/aws-load-balancer-ssl-ports: 443
       service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: true
       service.beta.kubernetes.io/aws-load-balancer-internal: true
+      service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
       externalTrafficPolicy: Local
   containers: 
     args: 
