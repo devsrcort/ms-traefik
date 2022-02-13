@@ -24,9 +24,6 @@ resource "helm_release" "traefik-ingress" {
   ports:
     web:
         redirectTo: websecure
-    name: https
-      port: 443
-      targetPort: 80
   service:
     annotations:
       service.beta.kubernetes.io/aws-load-balancer-type: nlb
