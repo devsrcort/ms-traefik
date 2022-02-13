@@ -35,9 +35,6 @@ resource "helm_release" "traefik-ingress" {
       --entrypoints.websecure.http.tls=true
       --entrypoints.web-secure.address=:443
       --entrypoints.web.address=:80
-      --entrypoints.web.http.redirections.entryPoint.scheme=https
-      --entrypoints.web.http.redirections.entrypoint.permanent=true
-      --entrypoints.web.http.redirections.entryPoint.to=websecure
   EOF
   ]
 }
