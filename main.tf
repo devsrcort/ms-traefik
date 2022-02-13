@@ -21,9 +21,6 @@ resource "helm_release" "traefik-ingress" {
   repository = "https://helm.traefik.io/traefik"
   namespace = "kube-system"
   values = [<<EOF
-  ports:
-    web:
-        redirectTo: websecure
   service:
     annotations:
       service.beta.kubernetes.io/aws-load-balancer-type: nlb
@@ -36,8 +33,11 @@ resource "helm_release" "traefik-ingress" {
       externalTrafficPolicy: Local
   containers: 
       --entrypoints.websecure.http.tls=true
-      --entrypoints.websecure.http.tls.domains[0].main=srt-wallet.io
-      --entrypoints.websecure.http.tls.domains[0].sans=*.srt-wallet.io
+      --entrypoints.web-secure.address=:443
+      --entrypoints.web.address=:80
+      --entrypoints.web.http.redirections.entryPoint.scheme=https
+      --entrypoints.web.http.redirections.entrypoint.permanent=true
+      --entrypoints.web.http.redirections.entryPoint.to=websecure
   EOF
   ]
 }
