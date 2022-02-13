@@ -42,10 +42,16 @@ resource "helm_release" "traefik-ingress" {
         port: 443
         targetPort: 80
   containers: 
+    name: traefik-proxy
+    ports:
+      containerPort: 80
+      hostPort: 80
+      name: traefik-proxy
     args: 
       --entrypoints.websecure.http.tls=true
       --entrypoints.websecure.http.tls.domains[0].main=srt-wallet.io
       --entrypoints.websecure.http.tls.domains[0].sans=*.srt-wallet.io
+      --kubernetes
   EOF
   ]
 }
