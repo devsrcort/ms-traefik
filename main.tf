@@ -21,6 +21,9 @@ resource "helm_release" "traefik-ingress" {
   repository = "https://helm.traefik.io/traefik"
   namespace = "kube-system"
   values = [<<EOF
+  ports:
+    web:
+        redirectTo: websecure
   service:
     annotations:
       service.beta.kubernetes.io/aws-load-balancer-type: nlb
